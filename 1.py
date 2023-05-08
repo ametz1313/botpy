@@ -15,6 +15,8 @@ response = requests.get(url)
 if response.status_code == 200:
     # Split the response into lines and send each line as a separate message to the channel
     for line in response.text.split('\n'):
-        bot.send_message(chat_id=channel_id, text=line)
+        async def send_messages_to_channel(bot, channel_id, messages):
+            for line in messages:
+                await bot.send_message(chat_id=channel_id, text=line)
 else:
     print('Error reading URL:', response.status_code, response.reason)
