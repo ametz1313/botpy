@@ -1,18 +1,36 @@
-from telegram.ext import Updater, CommandHandler
+package main
 
-def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! I'm your Telegram bot.")
+import (
+	"log"
 
-def main():
-    TOKEN = '<6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo>'
-    updater = Updater(bot_token=TOKEN, use_context=True)
-    dispatcher = updater.dispatcher
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+)
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+func main() {
+	bot, err := tgbotapi.NewBotAPI("your_bot_token_here")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    updater.start_polling()
-    updater.idle()
+	bot.Debug = true // Enable debugging mode
 
-if __name__ == '__main__':
-    main()
+	log.Printf("Authorized on account %s", bot.Self.UserName)
+
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+
+	updates, err := bot.GetUpdatesChan(u)
+
+	for update := range updates {
+		if update.Message == nil { // ignore any non-Message Updates
+			continue
+		}
+
+		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+
+		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Hello, "+update.Message.From.FirstName+"!")
+		msg.ReplyToMessageID = update.Message.MessageID
+
+		bot.Send(msg)
+	}
+}
