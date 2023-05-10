@@ -1,23 +1,34 @@
-import telegram
-from telegram.ext import Updater, CommandHandler
+import telebot
+from telegraf import Telegraf
+import requests
+import schedule
+import time
 
-# Define your bot token and chat ID
-BOT_TOKEN = '6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo'
-CHAT_ID = '-1001482956376'
+# Create a new Telegraf instance
+tg = Telegraf('YOUR_TELEGRAM_BOT_TOKEN')
 
-# Define a function to handle the /start command
-def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! I'm your Telegram bot.")
+# Define the URL of the web page to fetch
+url = 'https://www.example.com/page.txt'
 
-# Create an instance of the Updater class and pass in your bot token
-updater = Updater(BOT_TOKEN, pass_context=True)
+# Define the ID of the Telegram channel to send messages to
+channel_id = '@your_channel_name'
 
-# Register the start command handler with the dispatcher
-updater.dispatcher.add_handler(CommandHandler('start', start))
+# Define a function to fetch the contents of the web page and send them to the channel
+def fetch_and_send():
+    # Fetch the contents of the web page
+    response = requests.get(url)
 
-# Start the bot
-updater.start_polling()
+    # Split the contents into lines
+    lines = response.text.strip().split('\n')
 
-# Send a test message to the chat
-bot = telegram.Bot(token=BOT_TOKEN)
-bot.send_message(CHAT_ID, 'Bot started')
+    # Send each line to the Telegram channel
+    for line in lines:
+        tg.send_message(channel_id, line)
+
+# Schedule the function to run every 30 minutes
+schedule.every(30).minutes.do(fetch_and_send)
+
+# Start the scheduler
+while True:
+    schedule.run_pending()
+    time.sleep(1)
