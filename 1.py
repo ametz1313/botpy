@@ -1,26 +1,23 @@
-import requests
 import telegram
-from time import sleep
+from telegram.ext import Updater, CommandHandler
 
-# Replace these values with your own
-BOT_TOKEN = "6159945847:AAEKHNX7DoC21bUGLNU2WDBdVGImJAXZGbk"
-CHANNEL_NAME = "@filterchiz"
-URL_TO_READ = "https://raw.githubusercontent.com/ametz1313/All/main/Ssr.txt"
+# Define your bot token and chat ID
+BOT_TOKEN = '6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo'
+CHAT_ID = '-1001482956376'
 
-# Create a Telegram bot instance
+# Define a function to handle the /start command
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! I'm your Telegram bot.")
+
+# Create an instance of the Updater class and pass in your bot token
+updater = Updater(BOT_TOKEN, use_context=True)
+
+# Register the start command handler with the dispatcher
+updater.dispatcher.add_handler(CommandHandler('start', start))
+
+# Start the bot
+updater.start_polling()
+
+# Send a test message to the chat
 bot = telegram.Bot(token=BOT_TOKEN)
-
-# Read lines from URL and send them to Telegram channel
-while True:
-    try:
-        response = requests.get(URL_TO_READ)
-        if response.status_code == 200:
-            lines = response.text.splitlines()
-            for line in lines:
-                bot.send_message(chat_id=CHANNEL_NAME, text=line)
-        else:
-            print(f"Error reading URL: {response.status_code}")
-        # Wait for 5 minutes before checking the URL again
-        sleep(300)
-    except Exception as e:
-        print(f"Error occurred: {e}")
+bot.send_message(CHAT_ID, 'Bot started')
