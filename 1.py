@@ -1,13 +1,18 @@
-import os
-from telegraf import Telegraf
+from telegram.ext import Updater, CommandHandler
 
-# Create a new Telegraf instance with your Telegram Bot API token
-tg = Telegraf(os.environ.get('BOT_TOKEN'))
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! I'm your Telegram bot.")
 
-# Define a function to handle the /start command
-@tg.on('/start')
-def start_command(ctx):
-    ctx.reply('Hello! This is a simple Telegram bot.')
+def main():
+    TOKEN = '<6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo>'
+    updater = Updater(token=TOKEN, use_context=True)
+    dispatcher = updater.dispatcher
 
-# Start the bot
-tg.start_polling()
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
