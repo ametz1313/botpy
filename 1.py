@@ -1,34 +1,13 @@
-import telebot
+import os
 from telegraf import Telegraf
-import requests
-import schedule
-import time
 
-# Create a new Telegraf instance
-tg = Telegraf('6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo')
+# Create a new Telegraf instance with your Telegram Bot API token
+tg = Telegraf(os.environ.get('BOT_TOKEN'))
 
-# Define the URL of the web page to fetch
-url = 'https://raw.githubusercontent.com/ametz1313/All/main/Mtproto.txt'
+# Define a function to handle the /start command
+@tg.on('/start')
+def start_command(ctx):
+    ctx.reply('Hello! This is a simple Telegram bot.')
 
-# Define the ID of the Telegram channel to send messages to
-channel_id = '-1001482956376'
-
-# Define a function to fetch the contents of the web page and send them to the channel
-def fetch_and_send():
-    # Fetch the contents of the web page
-    response = requests.get(url)
-
-    # Split the contents into lines
-    lines = response.text.strip().split('\n')
-
-    # Send each line to the Telegram channel
-    for line in lines:
-        tg.send_message(channel_id, line)
-
-# Schedule the function to run every 30 minutes
-schedule.every(30).minutes.do(fetch_and_send)
-
-# Start the scheduler
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+# Start the bot
+tg.start_polling()
