@@ -5,13 +5,13 @@ import schedule
 import time
 
 # Create a new Telegraf instance
-tg = Telegraf('YOUR_TELEGRAM_BOT_TOKEN')
+tg = Telegraf('6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo')
 
 # Define the URL of the web page to fetch
-url = 'https://www.example.com/page.txt'
+url = 'https://raw.githubusercontent.com/ametz1313/All/main/Mtproto.txt'
 
 # Define the ID of the Telegram channel to send messages to
-channel_id = '@your_channel_name'
+channel_id = '-1001482956376'
 
 # Define a function to fetch the contents of the web page and send them to the channel
 def fetch_and_send():
