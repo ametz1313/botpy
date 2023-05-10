@@ -5,7 +5,7 @@ def start(update, context):
 
 def main():
     TOKEN = '<6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo>'
-    updater = Updater(token=TOKEN, use_context=True)
+    updater = Updater(bot_token=TOKEN, use_context=True)
     dispatcher = updater.dispatcher
 
     start_handler = CommandHandler('start', start)
