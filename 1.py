@@ -10,7 +10,7 @@ def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Hello! I'm your Telegram bot.")
 
 # Create an instance of the Updater class and pass in your bot token
-updater = Updater(BOT_TOKEN, use_context=True)
+updater = Updater(BOT_TOKEN, pass_context=True)
 
 # Register the start command handler with the dispatcher
 updater.dispatcher.add_handler(CommandHandler('start', start))
