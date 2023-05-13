@@ -1,5 +1,6 @@
 import logging
 
+from telegram import Bot
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from queue import Queue
 queue = Queue()
@@ -8,7 +9,7 @@ queue = Queue()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Create the updater
-updater = Updater('6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo', update_queue=Queue())
+bot = Bot('6159945847:AAEKHNX7DoC21bUGLNU2WDBdVGImJAXZGbk', update_queue=Queue())
 
 # Define a command handler
 def start(update, context):
