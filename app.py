@@ -1,12 +1,14 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, filters
+from queue import Queue
+queue = Queue()
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Create the updater
-updater = Updater('6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo')
+updater = Updater('6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo', update_queue=Queue())
 
 # Define a command handler
 def start(update, context):
