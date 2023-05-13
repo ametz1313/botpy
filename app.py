@@ -6,7 +6,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Create the updater
-updater = Updater('YOUR_BOT_TOKEN')
+updater = Updater('6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo')
 
 # Define a command handler
 def start(update, context):
