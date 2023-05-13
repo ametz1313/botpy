@@ -9,7 +9,7 @@ queue = Queue()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Create the updater
-bot = Bot('6159945847:AAEKHNX7DoC21bUGLNU2WDBdVGImJAXZGbk', update_queue=Queue())
+bot = Bot('6159945847:AAEKHNX7DoC21bUGLNU2WDBdVGImJAXZGbk')
 
 # Define a command handler
 def start(update, context):
