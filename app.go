@@ -1,36 +1,87 @@
 package main
 
 import (
-	"log"
-
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+    "fmt"
+    "log"
+    "os"
+    "strings"
+    "github.com/go-telegram-bot-api/telegram-bot-api"
 )
 
 func main() {
-	bot, err := tgbotapi.NewBotAPI("Write a teleg")
-	if err != nil {
-		log.Fatal(err)
-	}
+    // Get the bot token from the environment variable.
+    token := os.Getenv("6159945847:AAHLiJuL75pEZJ1XtlmA214cUcPpMS455Mo")
+    if token == "" {
+        log.Fatal("Please set the TELEGRAM_BOT_TOKEN environment variable.")
+    }
 
-	bot.Debug = true // Enable debugging mode
+    // Create a new BotAPI instance.
+    api := tgbotapi.NewBotAPI(token)
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+    // Register a handler for the /start command.
+    api.HandleFunc("/start", func(ctx *tgbotapi.Update) {
+        // Send a message to the user.
+        api.SendMessage(ctx.Message.Chat.ID, "Hello, world!")
+    })
 
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
+    // Register a handler for the /send_to_channel command.
+    api.HandleFunc("/send_to_channel", func(ctx *tgbotapi.Update) {
+        // Get the channel ID from the message.
+        channelID := ctx.Message.CommandArguments[0]
 
-	updates, err := bot.GetUpdatesChan(u)
+        // Get the lines from the URL.
+        lines, err := readLinesFromURL(ctx.Message.CommandArguments[1])
+        if err != nil {
+            log.Fatal(err)
+        }
 
-	for update := range updates {
-		if update.Message == nil { // ignore any non-Message Updates
-			continue
-		}
+        // Send 10 lines randomly to the channel.
+        for i := 0; i < 10; i++ {
+            line := lines[rand.Intn(len(lines))]
+            api.SendMessage(channelID, line)
+        }
+    })
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+    // Start the bot.
+    err := api.Start()
+    if err != nil {
+        log.Fatal(err)
+    }
 
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Hello, "+update.Message.From.FirstName+"!")
-		msg.ReplyToMessageID = update.Message.MessageID
+    // Wait for messages.
+    select {
+    case <-api.UpdatesChan:
+    }
+}
 
-		bot.Send(msg)
-	}
+func readLinesFromURL(url string) ([]string, error) {
+    // Create a new request.
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        return nil, err
+    }
+
+    // Do the request.
+    resp, err := http.DefaultClient.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    // Check the response code.
+    if resp.StatusCode != http.StatusOK {
+        return nil, fmt.Errorf("Error getting lines from URL: %d", resp.StatusCode)
+    }
+
+    // Read the lines from the response body.
+    lines := []string{}
+    scanner := bufio.NewScanner(resp.Body)
+    for scanner.Scan() {
+        lines = append(lines, scanner.Text())
+    }
+
+    // Close the response body.
+    resp.Body.Close()
+
+    // Return the lines.
+    return lines, nil
 }
