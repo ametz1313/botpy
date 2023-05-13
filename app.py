@@ -1,6 +1,6 @@
 import logging
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, filters
+from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from queue import Queue
 queue = Queue()
 
@@ -19,7 +19,7 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 # Add the handlers to the dispatcher
-updater.dispatcher.add_handler(CommandHandler('start', start))
+application.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(MessageHandler(Filters.text, echo))
 
 # Start the bot
