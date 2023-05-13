@@ -1,9 +1,6 @@
 import logging
 
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
-# Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters
 
 # Create the updater
 updater = Updater('6159945847:AAEKHNX7DoC21bUGLNU2WDBdVGImJAXZGbk')
