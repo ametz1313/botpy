@@ -15,5 +15,8 @@ with urllib.request.urlopen(url) as f:
 random_lines = random.sample(lines, k=10)
 
 # Send each line as a message to the channel
-for line in random_lines:
-    bot.send_message(chat_id=channel_id, text=line.decode().strip())
+async def send_messages():
+    for line in random_lines:
+        await bot.send_message(chat_id=channel_id, text=line.decode().strip())
+
+send_messages()
